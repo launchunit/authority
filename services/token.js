@@ -94,13 +94,12 @@ module.exports = HMAC_SALT => {
     const Token = typeof token !== 'string'
       ? '' : token;
 
-
     return new Promise((resolve, reject) => {
 
       Iron.unseal(Token, HMAC_SALT, HMAC_OPTS,
         (err, unsealed) => {
 
-          if (err) logger.error(err);;
+          // if (err) logger.error(err);;
 
           if (unsealed && unsealed.i && unsealed.o) {
             return resolve({

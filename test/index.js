@@ -15,7 +15,7 @@ test.before.serial(t => {
   })
   .then(db => {
     global.DB = db;
-    return require('../').Account({
+    return require('../')({
       db: db
     });
   })
@@ -59,3 +59,4 @@ require('./services/validate_token');
 
 //**** LATER ****** //
 // require('./services/create_group');
+// require('./services/update_group');

@@ -16,7 +16,7 @@ const mongoDB = require('mongodb-client');
  * @return {Object}
  * @public
  */
-exports.Account = opts => {
+module.exports = opts => {
 
   opts = Object.assign({
     hmacSalt: 'SvRoxdzS9kuuUZj1k_x=kclb4fdsFvmB'
@@ -44,13 +44,3 @@ exports.Account = opts => {
 
   return Services;
 };
-
-
-/**
- * @params {Object} accountServices (Required)
- *
- * @return {Promise}
- * @public
- */
-// exports.Route = require('./services/authorize_route');
-

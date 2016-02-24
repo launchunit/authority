@@ -71,6 +71,6 @@ test.serial('createToken (Valid id and org_id)', t => {
     t.ok(typeof Result.result === 'string');
 
     // Print
-    console.log(inspect(Result, { depth: null }));
+    // console.log(inspect(Result, { depth: null }));
   })
 });
