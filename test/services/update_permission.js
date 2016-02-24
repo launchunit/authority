@@ -93,61 +93,78 @@ test.serial('updatePermission (Valid roles but id Not Found)', t => {
   });
 });
 
-// test.serial('updatePermission (Valid id and roles)', t => {
+test.serial('updatePermission (Valid id w/ removeRoles But No roles)', t => {
 
-//   Input = {
-//     roles: ['guest', 'org.owner'],
-//     id: '56c0ff5a299c40311fa88ea3'
-//   };
+  Input = {
+    // roles: ['guest', 'org.owner'],
+    removeRoles: true,
+    id: '56c0ff5a299c40311fa88ea3'
+  };
 
-//   return Fn(Input)
-//   .then(Result => {
+  return Fn(Input)
+  .then(Result => {
+    t.ok(Result.error);
+    t.ok(Result.error.length === 1);
 
-//     t.ok(Result.error === undefined);
-//     t.ok(Result.result);
-//     t.ok(Result.result.id);
+    // Print
+    // console.log(inspect(Result, { depth: null }));
+  });
+});
 
-//     // Print
-//     console.log(inspect(Result, { depth: null }));
-//   });
-// });
+test.serial('updatePermission (Valid id and roles)', t => {
 
-// test.serial('updatePermission (Valid id w/ removeRoles)', t => {
+  Input = {
+    roles: ['guest', 'org.owner'],
+    id: '56cddec8b38a0984a61a7808'
+  };
 
-  // Input = {
-  //   // roles: ['guest', 'org.owner'],
-  //   removeRoles: true,
-  //   id: '56c0ff5a299c40311fa88ea3'
-  // };
+  return Fn(Input)
+  .then(Result => {
 
-  // return Fn(Input)
-  // .then(Result => {
+    t.ok(Result.error === undefined);
+    t.ok(Result.result);
+    t.ok(Result.result.id);
 
-  //   // t.ok(Result.error === undefined);
-  //   // t.ok(Result.result);
-  //   // t.ok(Result.result.id);
+    // Print
+    // console.log(inspect(Result, { depth: null }));
+  });
+});
 
-  //   // Print
-  //   console.log(inspect(Result, { depth: null }));
-  // });
-// });
+test.serial('updatePermission (Valid id w/ removeRoles But No roles)', t => {
 
-// // test.serial('updatePermission (Valid id and roles = null)', t => {
+  Input = {
+    roles: ['guest', 'org.admin'],
+    removeRoles: true,
+    id: '56cddec8b38a0984a61a7808'
+  };
 
-// //   Input = {
-// //     roles: null,
-// //     removeRoles: true,
-// //     id: '56c0ff5a299c40311fa88ea3'
-// //   };
+  return Fn(Input)
+  .then(Result => {
 
-// //   return Fn(Input)
-// //   .then(Result => {
+    t.ok(Result.error === undefined);
+    t.ok(Result.result);
+    t.ok(Result.result.id);
 
-//     // t.ok(Result.error === undefined);
-//     // t.ok(Result.result);
-//     // t.ok(Result.result.id);
+    // Print
+    // console.log(inspect(Result, { depth: null }));
+  });
+});
 
-//     // Print
-// //     console.log(inspect(Result, { depth: null }));
-// //   });
-// // });
+test.serial('updatePermission (Valid id and roles = null)', t => {
+
+  Input = {
+    roles: null,
+    id: '56c0ff5a299c40311fa88ea3'
+  };
+
+  return Fn(Input)
+  .then(Result => {
+
+    // t.ok(Result.error === undefined);
+    // t.ok(Result.result);
+    // t.ok(Result.result.id);
+
+    // Print
+    // console.log(inspect(Result, { depth: null }));
+  });
+});

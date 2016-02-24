@@ -16,7 +16,7 @@ test.serial('createToken (No Arguments)', t => {
   .then(Result => {
 
     t.ok(Result.error);
-    t.ok(Result.error.length === 1);
+    t.ok(Result.error.length === 2);
 
     // Print
     // console.log(inspect(Result, { depth: null }));
@@ -33,7 +33,7 @@ test.serial('createToken (Invalid id)', t => {
   .then(Result => {
 
     t.ok(Result.error);
-    t.ok(Result.error.length === 1);
+    t.ok(Result.error.length === 2);
 
     // Print
     // console.log(inspect(Result, { depth: null }));
@@ -73,5 +73,4 @@ test.serial('createToken (Valid id and org_id)', t => {
     // Print
     console.log(inspect(Result, { depth: null }));
   })
-  // .catch(e)
 });

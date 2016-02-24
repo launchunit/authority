@@ -47,14 +47,6 @@ exports.Account = opts => {
 
 
 /**
- * @params {Sting} hmacSalt (Optional)
- *
- * @return {Object}
- * @public
- */
-
-
-/**
  * @params {Object} accountServices (Required)
  *
  * @return {Promise}

@@ -18,7 +18,7 @@ test.serial('validateToken (Object Token)', t => {
     t.ok(Result.result === false);
 
     // Print
-    // console.log(inspect(Result, { depth: null }));
+    console.log(inspect(Result, { depth: null }));
   });
 });
 

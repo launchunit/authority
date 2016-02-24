@@ -33,6 +33,11 @@ const HMAC_OPTS = deepFreeze({
   localtimeOffsetMsec: 0
 });
 
+const SCHEMA = joiHelpers.compile({
+  id: joiHelpers.objectId().required(),
+  org_id: joiHelpers.objectId().required(),
+});
+
 
 module.exports = HMAC_SALT => {
 
@@ -52,22 +57,12 @@ module.exports = HMAC_SALT => {
 
     return new Promise((resolve, reject) => {
 
-      // Validate id
-      const validateId = joiHelpers.validate(objectId,
-                           (input.id || ''));
+      const validate = joiHelpers.validate(SCHEMA, input);
 
-      if (validateId.error) {
-        delete validateId.value;
-        return reject(validateId);
-      }
-
-      // Validate org_id
-      const validateOrgId = joiHelpers.validate(objectId,
-                           (input.org_id || ''));
-
-      if (validateOrgId.error) {
-        delete validateOrgId.value;
-        return reject(validateOrgId);
+      // Validate
+      if (validate.error) {
+        delete validate.value;
+        return reject(validate);
       }
 
       // Prep Data
@@ -96,11 +91,13 @@ module.exports = HMAC_SALT => {
    */
   function validateToken(token) {
 
+    const Token = typeof token !== 'string'
+      ? '' : token;
+
+
     return new Promise((resolve, reject) => {
 
-      Iron.unseal((token || '').toString(),
-        HMAC_SALT,
-        HMAC_OPTS,
+      Iron.unseal(Token, HMAC_SALT, HMAC_OPTS,
         (err, unsealed) => {
 
           if (err) logger.error(err);;

@@ -29,36 +29,33 @@ test.before.serial(t => {
   // setTimeout(() => { t.end() }, 2500);
 // });
 
-// Load Tests
-// require('./models/account');
-// require('./models/org');
+require('./models/account');
+require('./models/org');
+require('./models/permission');
 
-//**************
-// require('./models/permission');
+//**** LATER ****** //
 // require('./models/group');
 
 // Lib
-// require('./lib/crypto');
+require('./lib/crypto');
 
 // Account
-// require('./services/create_account');
-// require('./services/login');
-// require('./services/update_account');
-// require('./services/get_account');
+require('./services/create_account');
+require('./services/login');
+require('./services/update_account');
+require('./services/get_account');
 
 // Org
-// require('./services/create_org');
-// require('./services/update_org');
+require('./services/create_org');
+require('./services/update_org');
 
 // Permission
-// require('./services/create_permission');
+require('./services/create_permission');
 require('./services/update_permission');
 
+// Token
+require('./services/create_token');
+require('./services/validate_token');
 
-// require('./services/create_token');
-
+//**** LATER ****** //
 // require('./services/create_group');
-
-
-
-// require('./services/validate_token');

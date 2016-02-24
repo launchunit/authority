@@ -18,7 +18,7 @@ module.exports = db => {
 
   /**
    * @params {ObjectId} input.id (Required)
-   * @params {Array} input.roles (Optional)
+   * @params {Array} input.roles (Required)
    * @params {Boolean} input.removeRoles (Optional)
    *
    * Expects Sanitized Values
