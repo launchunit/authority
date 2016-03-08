@@ -151,9 +151,9 @@ module.exports = db => {
 
     })
     .then(result => {
-      return { result: {
-        id: constants.id
-      }};
+
+      // Get Basic User Info Now
+      return getAccount(constants);
     })
     .catch(promiseHelpers.mongoDone);
   };
@@ -224,7 +224,7 @@ module.exports = db => {
   function getAccount(input) {
 
     input = input || {};
-    var constants = {};
+    const constants = {};
 
     return new Promise((resolve, reject) => {
 
@@ -268,8 +268,9 @@ module.exports = db => {
           results[1] && Array.isArray(results[1]) &&
           results[1].length) {
 
-        // Save Reference & Create Promise
-        constants = results;
+        // Save Reference
+        constants.account = results[0];
+        constants.permission = results[1];
 
         const promiseEach = () => {
          return _.map(results[1], permission => {
@@ -295,43 +296,43 @@ module.exports = db => {
       });
 
     })
-    .then(results => {
+    .then(Orgs => {
 
       // Remove Nulls & Inactive
-      results = _.chain(results)
+      Orgs = _.chain(Orgs)
                  .compact()
                  .filter({ active: true })
-                 .intersectionWith(constants[1], (a, b) => {
+                 .intersectionWith(constants.permission, (a, b) => {
                    return a._id.equals(b.org_id);
                  })
                  .value();
 
-      if (results.length) {
+      if (Orgs.length) {
 
-        _.forEach(results, o => {
+        _.forEach(Orgs, o => {
 
-          Object.assign(o, _.find(constants[1], {
+          Object.assign(o, _.find(constants.permission, {
             org_id: o._id
-          }), { id: o._id });
+          })/*, { id: constants[1]._id }*/);
 
           // Cleanup
           delete o.account_id;
-          delete o.org_id;
           delete o._id;
         });
 
         // Cleanup
-        constants[0].permissions = results;
-        constants[0].id = constants[0]._id;
-        delete constants[0]._id;
+        constants.account.permission = (Orgs && Orgs || null);
+        constants.account.id = constants.account._id;
+        delete constants.account._id;
 
-        return { result: constants[0] };
+        return { result: constants.account };
       }
 
       return {
         error: [{
           path: 'id',
-          message: 'User account permission is not active.'
+          message: 'Either user account or org is not active.'
+          // message: 'User account permission is not active.'
         }]
       };
 

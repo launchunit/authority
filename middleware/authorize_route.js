@@ -11,74 +11,92 @@ const _ = require('lodash');
  * Constants
  */
 const SESSION_HEADER = 'X-Session-Token',
-  Roles = require('../lib/roles').rolesMap;
+  rolesMap = require('../lib/roles').rolesMap;
 
 
-module.exports = Services => {
+module.exports = (Services, Opts) => {
 
   /**
    * @params {Array} roles
    *
    * @public
    */
-  return roles => {
+  function authorizeRoute(Roles) {
 
-    if (! Array.isArray(roles)) {
+    if (! (Array.isArray(Roles) && Roles.length)) {
       throw new Error('Authorize route roles must be an array.')
     }
 
     // Validate Roles
-    _.forEach(roles, role => {
+    _.forEach(Roles, role => {
       if (rolesMap[role] === undefined)
         throw new Error(`Authorize route role "${role}" is invalid.`);
     });
-
-    // Convert to Object
-    roles = _.zipObject(roles);
 
 
     /**
      * Authorize Route Middleware
      */
-    return function authorizeRoute(req, res, next) {
+    return (req, res, next) => {
 
       const token = req.get(SESSION_HEADER);
       req._session = req._session || {};
-      req._session.authorize_in_progress = true;
-
 
       // Validate Session Token
       if (token) {
 
-        authServer.validateToken(token)
+        Services.validateToken(token)
         .then(result => {
 
+          // If id is Present
+          if (result.result.id) {
+
+            // logger.debug(result.result);
+
+            // Begin Process
+            req._session.user = {};
+            req._session.user.id = result.result.id;
+
+            // Validate Role
+            if (result.result.roles) {
+              req._session.user.roles = _.intersection(
+                result.result.roles, Roles);
+
+              if (req._session.user.roles.length < 1) {
+                return res.writeError('not_authorized');
+              }
+            }
+
+            // Validate Only Token - simpleAuth
+            else if (Opts.simpleAuth) {
+              return res.writeError('not_authorized');
+            }
+
+            else {
+
+
+            }
+
+            return next();
+          }
+
+          return res.writeError('not_authorized');
         })
+
         .catch(err => {
 
-        });
+          if (err instanceof Error)
+            return next(err);
 
-        // && bufferEq(MASTER_TOKEN, token)) {
-        // req._session = req._session || {};
-        // req._session.masterToken = true;
-        // return next();
+          return res.writeError('not_authorized');
+        });
       }
 
       // Authorize Failed
-      else {
-
-        req._session.authorize_in_progress = false;
-        req._session.authorize = false;
-        return app.writeJson(res, 'not_authorized');
-      }
-
+      else return res.writeError('not_authorized');
     };
 
   };
+
+  return { authorizeRoute };
 };
-
-
-
-
-
-

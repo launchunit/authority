@@ -71,8 +71,9 @@ test.serial('login (Password and Valid Email)', t => {
     t.ok(Result.error === undefined);
     t.ok(Result.result);
     t.ok(Result.result.id);
+    t.ok(Result.result.permission);
 
     // Print
-    // console.log(inspect(Result, { depth: null }));
+    console.log(inspect(Result, { depth: null }));
   });
 });

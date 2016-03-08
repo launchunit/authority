@@ -299,7 +299,7 @@ test.serial.cb('Account Model (Update_Account)', t => {
   t.ok(Result.error);
   t.ok(Result.error.length === 1);
 
-  // Test #7
+  // Test #8
   Input = {
     id: '56be1d2a54d12187e6ee764e',
     first_name: 'Karan',

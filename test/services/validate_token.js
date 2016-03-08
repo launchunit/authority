@@ -45,7 +45,23 @@ test.serial('validateToken (Token)', t => {
 
     t.ok(Result.result);
     t.ok(Result.result.id);
-    t.ok(Result.result.org_id);
+
+    // Print
+    // console.log(inspect(Result, { depth: null }));
+  });
+});
+
+
+test.serial('validateToken (Token w/ Roles)', t => {
+
+  var Input = 'Fe26.2**3fcd0a07a52b064f4de68c87817317be34944c499332a41641452cb9169fbcd8*bA9b31aCCjFGSv_lucc9Sw*14PBKD8-tG3KLwuHRzEYUiQ4verN6fs51HE-l5ebtca2OT2x6PCa-B77g2Cp_d3pheJ2XDA4_XU92NyU9A06-5GMbiAHVLs3L7UHjFNf8xw**fcb428ff41bfff60e83f7482762efbb682c4550be0c5b12eecd2386e390280fd*Vau3J69BHCscRRl9t-uS6yDDtA-9jV87miF3HGtXFQE';
+
+  return Fn(Input)
+  .then(Result => {
+
+    t.ok(Result.result);
+    t.ok(Result.result.id);
+    t.ok(Result.result.roles);
 
     // Print
     // console.log(inspect(Result, { depth: null }));

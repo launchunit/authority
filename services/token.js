@@ -5,9 +5,11 @@
  * Module dependencies.
  * @private
  */
-const joiHelpers = require('joi-helpers'),
+const Joi = require('joi'),
+  joiHelpers = require('joi-helpers'),
   promiseHelpers = require('promise-helpers'),
   objectId = joiHelpers.objectId(),
+  Roles = require('../lib/roles').roles,
   deepFreeze = require('deep-freeze'),
   Iron = require('iron');
 
@@ -33,21 +35,16 @@ const HMAC_OPTS = deepFreeze({
   localtimeOffsetMsec: 0
 });
 
-const SCHEMA = joiHelpers.compile({
-  id: joiHelpers.objectId().required(),
-  org_id: joiHelpers.objectId().required(),
-});
 
+module.exports = (HMAC_SALT, db) => {
 
-module.exports = HMAC_SALT => {
-
-  // Type Case It
+  // Type Cast It
   HMAC_SALT = HMAC_SALT.toString();
 
 
   /**
    * @params {String} input.id (Required)
-   * @params {String} input.org_id (Required)
+   * @params {Array} input.roles (Optional)
    *
    * @public
    */
@@ -57,7 +54,8 @@ module.exports = HMAC_SALT => {
 
     return new Promise((resolve, reject) => {
 
-      const validate = joiHelpers.validate(SCHEMA, input);
+      const validate = joiHelpers.validate(
+        db.collections.permission.methods.create_token, input);
 
       // Validate
       if (validate.error) {
@@ -66,10 +64,12 @@ module.exports = HMAC_SALT => {
       }
 
       // Prep Data
-      const Data = {
-        i: input.id.toString(),
-        o: input.org_id.toString()
-      };
+      const Data = { i: validate.value.id.toString() };
+
+      // Add Role to Data
+      if (validate.value.roles) {
+        Data.r = validate.value.roles;
+      }
 
       Iron.seal(Data, HMAC_SALT, HMAC_OPTS, (err, sealed) => {
         if (err) return reject(err);
@@ -101,12 +101,11 @@ module.exports = HMAC_SALT => {
 
           // if (err) logger.error(err);;
 
-          if (unsealed && unsealed.i && unsealed.o) {
-            return resolve({
-              result: {
-                id: unsealed.i, org_id: unsealed.o
-              }
-            });
+          if (unsealed && unsealed.i) {
+            const result = { id: unsealed.i };
+
+            if (unsealed.r) result.roles = unsealed.r;
+            return resolve({ result: result })
           }
 
           return resolve({ result: false });

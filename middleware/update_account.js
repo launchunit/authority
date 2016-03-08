@@ -13,24 +13,20 @@ module.exports = Services => {
 
   /**
    * @params {String} req._session.user.id (Required)
+   * @params {Object} req.body
    *
    * @public
    */
-  function getAccount(req, res, next) {
+  function updateAccount(req, res, next) {
 
     req._session = req._session || {};
     var userObj;
 
-    Services.getAccount(req._session.user)
+    Services.updateAccount(Object.assign({},
+      req._session.user, req.body))
     .then(user => {
 
       if (user.result) {
-
-        // Clean up Permission
-        user.result.permission = _.map(user.result.permission, p => {
-          return _.pick(p, ['name', 'org_id', 'roles']);
-        });
-
         return res.writeJson(user.result);
       }
 
@@ -46,5 +42,5 @@ module.exports = Services => {
     });
   };
 
-  return { getAccount };
+  return { updateAccount };
 };

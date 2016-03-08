@@ -50,7 +50,7 @@ exports.methods = {
       array: {
         base: '{{key}} must be an array.',
       }
-    }}),
+  }}),
 
   // Update Permission
   update_permission: Joi.object({
@@ -90,6 +90,17 @@ exports.methods = {
     }
   }),
 
+  // Create New Token - Used @ Token Services
+  create_token: Joi.object({
+    id: exports.schema.account_id.required(),
+    roles: exports.schema.roles,
+  })
+  .options({
+    language: {
+      array: {
+        base: '{{key}} must be an array.',
+      }
+  }}),
 };
 
 exports.indexes = [

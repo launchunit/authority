@@ -251,7 +251,7 @@ test.serial.cb('Permission Model (Update_Roles)', t => {
   t.ok(Result.error.length === 1);
 
   // Print
-  console.log(inspect(Result, { depth: null }));
+  // console.log(inspect(Result, { depth: null }));
 
   t.end();
 });

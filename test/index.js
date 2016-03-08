@@ -19,44 +19,51 @@ test.before.serial(t => {
       db: db
     });
   })
-  .then(Services => {
-    global.Services = Services;
+  .then(result => {
+    global.Middleware = result.Middleware;
+    global.Services = result.Services;
   });
 });
 
 // Fake Delay
 // test.before.serial.cb(t => {
   // setTimeout(() => { t.end() }, 2500);
-// });
+// // });
 
-require('./models/account');
-require('./models/org');
-require('./models/permission');
+// require('./models/account');
+// require('./models/org');
+// require('./models/permission');
 
 //**** LATER ****** //
 // require('./models/group');
 
 // Lib
-require('./lib/crypto');
+// require('./lib/crypto');
 
 // Account
-require('./services/create_account');
-require('./services/login');
-require('./services/update_account');
-require('./services/get_account');
+// require('./services/create_account');
+// require('./services/login');
+// require('./services/update_account');
+// require('./services/get_account');
 
 // Org
-require('./services/create_org');
-require('./services/update_org');
+// require('./services/create_org');
+// require('./services/update_org');
 
 // Permission
-require('./services/create_permission');
-require('./services/update_permission');
+// require('./services/create_permission');
+// require('./services/update_permission');
 
 // Token
-require('./services/create_token');
-require('./services/validate_token');
+// require('./services/create_token');
+// require('./services/validate_token');
 
-//**** LATER ****** //
+// //**** LATER ****** //
 // require('./services/create_group');
 // require('./services/update_group');
+
+// Middleware
+require('./middleware/login');
+require('./middleware/auth_route');
+require('./middleware/get_account');
+require('./middleware/update_account');

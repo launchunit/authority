@@ -11,7 +11,8 @@ const mongoDB = require('mongodb-client');
 
 /**
  * @params {Db Instance} opts.db (Required)
- * @params {Sting} hmacSalt (Optional)
+ * @params {Sting} opts.hmacSalt (Optional)
+ * @params {Boolean} opts.simpleAuth (Default = true)
  *
  * @return {Object}
  * @public
@@ -19,7 +20,8 @@ const mongoDB = require('mongodb-client');
 module.exports = opts => {
 
   opts = Object.assign({
-    hmacSalt: 'SvRoxdzS9kuuUZj1k_x=kclb4fdsFvmB'
+    hmacSalt: 'SvRoxdzS9kuuUZj1k_x=kclb4fdsFvmB',
+    simpleAuth: true
   }, opts);
 
 
@@ -33,14 +35,22 @@ module.exports = opts => {
     db: opts.db.db || opts.db
   });
 
-  // Build Services Object
+  // Services Object
   const Services = Object.assign({},
     require('./services/account')(opts.db),
     require('./services/org')(opts.db),
     require('./services/group')(opts.db),
     require('./services/permission')(opts.db),
-    require('./services/token')(opts.hmacSalt)
+    require('./services/token')(opts.hmacSalt, opts.db)
   );
 
-  return Services;
+  // Middleware Object
+  const Middleware = Object.assign({},
+    require('./middleware/login')(Services, opts),
+    require('./middleware/authorize_route')(Services, opts),
+    require('./middleware/get_account')(Services),
+    require('./middleware/update_account')(Services)
+  );
+
+  return { Services, Middleware };
 };
