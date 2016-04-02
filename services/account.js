@@ -348,5 +348,4 @@ module.exports = db => {
     updateAccount,
     getAccount
   };
-
 };

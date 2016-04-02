@@ -115,9 +115,5 @@ module.exports = (HMAC_SALT, db) => {
 
 
   // Return
-  return {
-    createToken,
-    validateToken
-  };
-
+  return { createToken, validateToken };
 };

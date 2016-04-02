@@ -72,10 +72,9 @@ module.exports = (Services, Opts) => {
               return res.writeError('not_authorized');
             }
 
-            else {
-
-
-            }
+            // ToDo:
+            // Deffered Event or Promise Based Auth System
+            // else {}
 
             return next();
           }

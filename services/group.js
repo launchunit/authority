@@ -154,5 +154,4 @@ module.exports = db => {
 
   // Return
   return { createGroup, updateGroup };
-
 };

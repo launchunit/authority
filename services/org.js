@@ -128,5 +128,4 @@ module.exports = db => {
 
   // Return
   return { createOrg, updateOrg };
-
 };
